@@ -147,14 +147,27 @@ void Dijkstra(grafo *g, int vertInicial, int vertFinal){
         printf("\n");
 }
 
+int contarLinhas(FILE *path){
+    int linhas = 0;
+    char caractere;
+
+    while ((caractere = fgetc(path)) != EOF){
+        if(caractere == '\n') linhas++;
+    }
+    
+    if(caractere != '\n') linhas++;
+    return linhas;
+}
+
 int main(){
     FILE *fonte = fopen("topologia.txt", "r");
     if(fonte == NULL){
         printf("erro ao abrir arquivo...\n");
         exit (1);
     }
+    int nLinhas = contarLinhas(fonte);
 
-    grafo *mainGrafo = criaGrafo(3);
+    grafo *mainGrafo = criaGrafo(nLinhas);
 
     char linha[50];
     char vertOrigem, vertFinal;
