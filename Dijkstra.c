@@ -118,10 +118,10 @@ void printGrafo(grafo *gr){
 	int i;
 	
 	for(i = 0; i < gr->vertices; i++){
-        printf("Vertice %d: ",i);
+        printf("Vertice %c: ", i + 'A');
 		aresta *ad = gr->adj[i].cab;
 			while(ad){ 
-				printf("v%d(%d) ",ad->vert,ad->peso);
+				printf("v%c(%d) ",ad->vert + 'A',ad->peso);
 				ad = ad->proxVertice;
 			}
 		printf("\n");	
