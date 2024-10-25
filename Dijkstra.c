@@ -166,6 +166,7 @@ int main(){
         exit (1);
     }
     int nLinhas = contarLinhas(fonte);
+    rewind(fonte);
 
     grafo *mainGrafo = criaGrafo(nLinhas);
 
