@@ -83,7 +83,6 @@ void printGrafo(grafo *gr){
 void Dijkstra(grafo *g, int vertInicial, int vertFinal){
     const int totalVert = g->vertices;
     int i;
-    int menorDist = infinito;
     int distancia[totalVert];
     int anterior[totalVert];
     bool visitado[totalVert];
@@ -97,12 +96,16 @@ void Dijkstra(grafo *g, int vertInicial, int vertFinal){
 
     int visita, ultimo;
     for(i = 0; i < totalVert; i++){
+        int menorDist = infinito;
+        int ultimo = -1;
+
         for(visita = 0; visita < totalVert; visita++){
             if(!visitado[visita] && distancia[visita] < menorDist){
                 menorDist = distancia[visita];
                 ultimo = visita;
             }
         }
+        
         if(ultimo == -1)
             break;
 
@@ -115,7 +118,7 @@ void Dijkstra(grafo *g, int vertInicial, int vertFinal){
             vertId = vizinho->vert;
             pesoCaminho = vizinho->peso;
 
-            if (!visitado[vertId] && distancia[ultimo] + pesoCaminho < distancia[visita]) {
+            if (!visitado[vertId] && distancia[ultimo] + pesoCaminho < distancia[vertId]) {
                 distancia[vertId] = distancia[ultimo] + pesoCaminho;
                 anterior[vertId] = ultimo;
             }
@@ -138,7 +141,8 @@ void Dijkstra(grafo *g, int vertInicial, int vertFinal){
 
     printf("Caminho:");
         for (i = contador - 1; i >= 0; i--) {
-            printf(" %c ->", caminho[i] + 'A');  // Convertendo o índice de volta para caractere
+            printf(" %c", caminho[i] + 'A');  // Convertendo o índice de volta para caractere
+            if (i > 0) printf(" ->");
         }
         printf("\n");
 }
