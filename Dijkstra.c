@@ -3,12 +3,9 @@
 #include <stdbool.h>
 #include <string.h>
 
-// ler arquivo da topologia
-// selecionar vertices inicial e final
-// apresentar o percurso na tela
-
 #define infinito 1000000
 
+// declaração structs
 typedef struct {
     int vert;
     int peso;
@@ -25,6 +22,57 @@ typedef struct {
     cabLista *adj; 	
 } grafo;
 
+// declaração funções
+grafo *criaGrafo (int numvertices);
+aresta *criaAresta(int vertice, int peso);
+bool ligarAresta(grafo *g, int vertOrigem, int vertFim, int peso);
+int mapeiaVertice(char vertice);
+void printGrafo(grafo *gr);
+void Dijkstra(grafo *g, int vertInicial, int vertFinal);
+int contarLinhas(FILE *path);
+
+int main(){
+    FILE *fonte = fopen("topologia.txt", "r");
+    if(fonte == NULL){
+        printf("erro ao abrir arquivo...\n");
+        exit (1);
+    }
+    int nLinhas = contarLinhas(fonte);
+    rewind(fonte);
+
+    grafo *mainGrafo = criaGrafo(nLinhas);
+
+    char linha[50];
+    char vertOrigem, vertFinal;
+    int OrigemId, FinalId;
+    int peso;
+    while(fgets(linha,sizeof(linha),fonte)){
+        sscanf(linha,"%c;%c;%d",&vertOrigem,&vertFinal,&peso);
+        OrigemId = mapeiaVertice(vertOrigem);
+        FinalId = mapeiaVertice(vertFinal);
+        ligarAresta(mainGrafo, OrigemId, FinalId, peso);
+    }
+
+    printGrafo(mainGrafo);
+
+    char CaminhoIni,CaminhoFim;
+    int IdVertIni, IdVertFinal;
+    printf("\nSelecione dois vertices para calcular o menor caminho.\n");
+    printf("Vertice inicial: ");
+    scanf("%c",&CaminhoIni);
+    printf("\nVertice final: ");
+    scanf(" %c",&CaminhoFim);
+
+    IdVertIni = mapeiaVertice(CaminhoIni);
+    IdVertFinal = mapeiaVertice(CaminhoFim);
+
+    Dijkstra(mainGrafo,IdVertIni,IdVertFinal);
+
+    fclose(fonte);
+    return 0;
+}
+
+// implementação das funções
 grafo *criaGrafo (int numvertices) {
 	int i;
 
@@ -157,45 +205,4 @@ int contarLinhas(FILE *path){
     
     if(caractere != '\n') linhas++;
     return linhas;
-}
-
-int main(){
-    FILE *fonte = fopen("topologia.txt", "r");
-    if(fonte == NULL){
-        printf("erro ao abrir arquivo...\n");
-        exit (1);
-    }
-    int nLinhas = contarLinhas(fonte);
-    rewind(fonte);
-
-    grafo *mainGrafo = criaGrafo(nLinhas);
-
-    char linha[50];
-    char vertOrigem, vertFinal;
-    int OrigemId, FinalId;
-    int peso;
-    while(fgets(linha,sizeof(linha),fonte)){
-        sscanf(linha,"%c;%c;%d",&vertOrigem,&vertFinal,&peso);
-        OrigemId = mapeiaVertice(vertOrigem);
-        FinalId = mapeiaVertice(vertFinal);
-        ligarAresta(mainGrafo, OrigemId, FinalId, peso);
-    }
-
-    printGrafo(mainGrafo);
-
-    char CaminhoIni,CaminhoFim;
-    int IdVertIni, IdVertFinal;
-    printf("\nSelecione dois vertices para calcular o menor caminho.\n");
-    printf("Vertice inicial: ");
-    scanf("%c",&CaminhoIni);
-    printf("\nVertice final: ");
-    scanf(" %c",&CaminhoFim);
-
-    IdVertIni = mapeiaVertice(CaminhoIni);
-    IdVertFinal = mapeiaVertice(CaminhoFim);
-
-    Dijkstra(mainGrafo,IdVertIni,IdVertFinal);
-
-    fclose(fonte);
-    return 0;
 }
