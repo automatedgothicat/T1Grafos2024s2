@@ -44,8 +44,7 @@ int main(){
 
     char linha[50];
     char vertOrigem, vertFinal;
-    int OrigemId, FinalId;
-    int peso;
+    int OrigemId, FinalId, peso;
     while(fgets(linha,sizeof(linha),fonte)){
         sscanf(linha,"%c;%c;%d",&vertOrigem,&vertFinal,&peso);
         OrigemId = mapeiaVertice(vertOrigem);
